@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: spc-deployment
+  labels:
+    app: spc
+spc:
+  replicas: 2
+  selector: 
+    matchLabels:
+      app: spc
+      version: latest
+  template:
+    metadata:
+      labels:
+        app: spc
+        version: latest
+    spec:
+      containers:
+        - image: mattsmanoj/spc:1.0
+          name: spc-deployment
+          imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 8080
+
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: spc-svc
+spc:
+  selector: 
+    app: spc
+  ports:
+    - port: 8080  
+  type: nodeport  
